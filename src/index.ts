@@ -67,6 +67,25 @@ app.get('/random', (c) => {
   return new ImageResponse(html, {width: 320, height: 320});
 });
 
+app.get('/dlsite', async (c) => {
+  const id = c.req.queries('id');
+  if (!id) return invalidImageResponse();
+  const url = `https://www.dlsite.com/maniax/product/info/ajax?product_id=${id[0]}&cdn_cache_min=1`;
+  const json = await fetch(url).then(res => res.text());
+  const { dl_count, wishlist_count, work_image } = JSON.parse(json)[id[0]];
+  const html = /*html*/`
+    <div style="${rootDivStyle} align-items: flex-end; justify-content: flex-start; background-image: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8)), url('https:${work_image}'); color: #FFFFFF;">
+      <div style="display: flex; flex-direction: column; align-items: flex-start; gap: -24px;">
+        <p style="font-size: 32px;">DL:</p>
+        <p style="font-size: 64px;">${dl_count}</p>
+        <p style="font-size: 32px;">WL:</p>
+        <p style="font-size: 64px;">${wishlist_count}</p>
+      </div>
+    </div>
+  `;
+  return new ImageResponse(html, {width: 320, height: 320});
+});
+
 const invalidImageResponse = (): ImageResponse => {
   const html = /*html*/`
     <div style="${rootDivStyle} background: #000000; color: #FFFFFF;">
