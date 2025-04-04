@@ -53,6 +53,20 @@ app.get('/date', (c) => {
   return new ImageResponse(html, {width: 320, height: 320});
 });
 
+app.get('/random', (c) => {
+  const randomMax = 100;
+  const random = Math.floor(Math.random() * randomMax);
+  const html = /*html*/`
+    <div style="${rootDivStyle} background: #000000; color: #FFFFFF;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: -16px;">
+        <p style="font-size: 32px;">0-${randomMax - 1}</p>
+        <p style="font-size: 128px;">${random}</p>
+      </div>
+    </div>
+  `;
+  return new ImageResponse(html, {width: 320, height: 320});
+});
+
 const invalidImageResponse = (): ImageResponse => {
   const html = /*html*/`
     <div style="${rootDivStyle} background: #000000; color: #FFFFFF;">
