@@ -8,9 +8,9 @@ app.get('/', (c) => {
 });
 
 app.get('/color', (c) => {
-  const rbg = c.req.queries('rbg');
-  if (!rbg) return invalidImageResponse();
-  const html = `<div style="display: flex; height: 100vh; width: 100vw; background: #${rbg[0]}"></div>`;
+  const rgb = c.req.queries('rgb');
+  if (!rgb) return invalidImageResponse();
+  const html = `<div style="display: flex; height: 100vh; width: 100vw; background: #${rgb[0]};"></div>`;
   return new ImageResponse(html, {width: 24, height: 24});
 });
 
