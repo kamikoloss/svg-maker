@@ -55,11 +55,11 @@ app.get('/date', (c) => {
 
 app.get('/random', (c) => {
   const randomMax = 100;
-  const random = Math.floor(Math.random() * randomMax);
+  const random = Math.floor(Math.random() * randomMax) + 1;
   const html = /*html*/`
     <div style="${rootDivStyle} background: #000000; color: #FFFFFF;">
       <div style="display: flex; flex-direction: column; align-items: center; gap: -16px;">
-        <p style="font-size: 32px;">0-${randomMax - 1}</p>
+        <p style="font-size: 32px;">1d${randomMax}=</p>
         <p style="font-size: 128px;">${random}</p>
       </div>
     </div>
