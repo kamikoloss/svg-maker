@@ -74,8 +74,10 @@ app.get('/dlsite', async (c) => {
   const json = await fetch(url).then(res => res.text());
   const { dl_count, wishlist_count, work_image } = JSON.parse(json)[id[0]];
   const html = /*html*/`
-    <div style="${rootDivStyle} align-items: flex-end; justify-content: flex-start; background-image: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8)), url('https:${work_image}'); color: #FFFFFF;">
-      <div style="display: flex; flex-direction: column; align-items: flex-start; gap: -24px;">
+    <div style="${rootDivStyle} align-items: flex-end; justify-content: flex-start; color: #FFFFFF;">
+      <img src="https:${work_image}" style="width: 100%; height: 100%; object-fit: cover;">
+      <div style="position: absolute; display: flex; width: 100%; height: 100%; background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.9));"></div>
+      <div style="position: absolute; display: flex; flex-direction: column; align-items: flex-start; gap: -24px;">
         <p style="font-size: 32px;">DL:</p>
         <p style="font-size: 64px;">${dl_count}</p>
         <p style="font-size: 32px;">WL:</p>
