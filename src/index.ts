@@ -10,8 +10,8 @@ app.get('/', (c) => {
 app.get('/color', (c) => {
   const rbg = c.req.queries('rbg');
   if (!rbg) return invalidImageResponse();
-  const html = `<div style="display:flex; height: 100vh; width: 100vw; background: #${rbg[0]}"></div>`;
-  return new ImageResponse(html, {width: 32, height: 32});
+  const html = `<div style="display: flex; height: 100vh; width: 100vw; background: #${rbg[0]}"></div>`;
+  return new ImageResponse(html, {width: 24, height: 24});
 });
 
 const invalidImageResponse = (): ImageResponse => {
@@ -20,7 +20,7 @@ const invalidImageResponse = (): ImageResponse => {
       <div style="display: flex; font-size: 256px; margin: 0; font-weight: 700; color: #FFFFFF">?</div>
     </div>
  `;
-  return new ImageResponse(html, {width: 320, height: 320});
+  return new ImageResponse(html, {width: 64, height: 64});
 }
 
 export default app;
