@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { ImageResponse } from 'workers-og';
+import { ImageResponse, loadGoogleFont } from 'workers-og';
 
 const app = new Hono();
 
@@ -13,7 +13,7 @@ app.get('/color', (c) => {
   return new ImageResponse(html, { format: 'svg', width: 24, height: 24 });
 });
 
-app.get('/date', (c) => {
+app.get('/date', async (c) => {
   const date = c.req.queries('date');
   if (!date) return invalidImageResponse();
   let dayCount = 0;
@@ -36,11 +36,16 @@ app.get('/date', (c) => {
     </div>
   `;
   //console.log(html);
-  const headers = { 'Cache-Control': `max-age=${3600 * 6}` };
-  return new ImageResponse(html, { format: 'svg', width: 320, height: 320, headers });
+  return new ImageResponse(html, {
+    format: 'svg',
+    width: 320,
+    height: 320,
+    headers: { 'Cache-Control': `max-age=${3600 * 6}` },
+    fonts: [await getFont('JetBrains Mono')]
+  });
 });
 
-app.get('/random', (c) => {
+app.get('/random', async (c) => {
   const randomMax = 100;
   const random = Math.floor(Math.random() * randomMax) + 1;
   const html = /*html*/`
@@ -52,8 +57,13 @@ app.get('/random', (c) => {
     </div>
   `;
   //console.log(html);
-  const headers = { 'Cache-Control': 'max-age=0' };
-  return new ImageResponse(html, { format: 'svg', width: 320, height: 320, headers });
+  return new ImageResponse(html, {
+    format: 'svg',
+    width: 320,
+    height: 320,
+    headers: { 'Cache-Control': `max-age=${0}` },
+    fonts: [await getFont('JetBrains Mono')]
+  });
 });
 
 app.get('/dlsite', async (c) => {
@@ -75,8 +85,13 @@ app.get('/dlsite', async (c) => {
     </div>
   `;
   //console.log(html);
-  const headers = { 'Cache-Control': `max-age=${3600 * 6}` };
-  return new ImageResponse(html, { format: 'png', width: 320, height: 320, headers });
+  return new ImageResponse(html, {
+    format: 'png',
+    width: 320,
+    height: 320,
+    headers: { 'Cache-Control': `max-age=${3600 * 6}` },
+    fonts: [await getFont('JetBrains Mono')]
+  });
 });
 
 // fallback
@@ -98,6 +113,13 @@ const invalidImageResponse = (): ImageResponse => {
     </div>
   `;
   return new ImageResponse(html, { format: 'svg', width: 64, height: 64 });
+}
+
+const getFont = async(name: string): Promise<Object> => {
+  return {
+    name: 'name',
+    data: await loadGoogleFont({ family: name }),
+  };
 }
 
 export default app;
