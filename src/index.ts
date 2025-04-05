@@ -12,10 +12,6 @@ const rootDivStyle = `
   font-family: sans-serif;
 `;
 
-app.get('/', (c) => {
-  return invalidImageResponse();
-});
-
 app.get('/color', (c) => {
   const rgb = c.req.queries('rgb');
   if (!rgb) return invalidImageResponse();
@@ -87,6 +83,9 @@ app.get('/dlsite', async (c) => {
   `;
   return new ImageResponse(html, {width: 320, height: 320});
 });
+
+// fallback
+app.get('*', (c) => invalidImageResponse());
 
 const invalidImageResponse = (): ImageResponse => {
   const html = /*html*/`
