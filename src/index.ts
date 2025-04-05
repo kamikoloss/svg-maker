@@ -18,6 +18,7 @@ app.get('/date', async (c) => {
   if (!date) return invalidImageResponse();
   let dayCount = 0;
   let dayWord = '';
+  let dayFontSizePx = 128;
   const isBefore = Date.now() < Date.parse(date[0]);
   if (isBefore) {
     dayCount = Math.floor((Date.parse(date[0]) - Date.now()) / (1000 * 60 * 60 * 24));
@@ -26,10 +27,13 @@ app.get('/date', async (c) => {
     dayCount = Math.floor((Date.now() - Date.parse(date[0])) / (1000 * 60 * 60 * 24));
     dayWord = 'since';
   }
+  if (dayCount <= -1000 || 10000 <= dayCount) {
+    dayFontSizePx = 96;
+  }
   const html = /*html*/`
     <div style="${rootDivStyle} background: #000000; color: #FFFFFF;">
       <div style="display: flex; flex-direction: column; align-items: center; gap: -16px;">
-        <p style="font-size: 128px;">${dayCount}</p>
+        <p style="font-size: ${dayFontSizePx}px;">${dayCount}</p>
         <p style="font-size: 32px;">days ${dayWord}</p>
         <p style="font-size: 32px;">${date[0]}</p>
       </div>
