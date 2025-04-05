@@ -3,15 +3,6 @@ import { ImageResponse } from 'workers-og';
 
 const app = new Hono();
 
-const rootDivStyle = `
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-  font-family: sans-serif;
-`;
-
 app.get('/color', (c) => {
   const rgb = c.req.queries('rgb');
   if (!rgb) return invalidImageResponse();
@@ -48,7 +39,8 @@ app.get('/date', (c) => {
     </div>
   `;
   //console.log(html);
-  return new ImageResponse(html, { format: 'svg', width: 320, height: 320 });
+  const headers = { 'Cache-Control': `max-age=${3600 * 3}` };
+  return new ImageResponse(html, { format: 'svg', width: 320, height: 320, headers });
 });
 
 app.get('/random', (c) => {
@@ -63,7 +55,7 @@ app.get('/random', (c) => {
     </div>
   `;
   //console.log(html);
-  const headers = { 'Cache-Control': 'max-age=0'};
+  const headers = { 'Cache-Control': 'max-age=0' };
   return new ImageResponse(html, { format: 'svg', width: 320, height: 320, headers });
 });
 
@@ -86,11 +78,21 @@ app.get('/dlsite', async (c) => {
     </div>
   `;
   //console.log(html);
-  return new ImageResponse(html, { format: 'png', width: 320, height: 320 });
+  const headers = { 'Cache-Control': `max-age=${3600 * 3}` };
+  return new ImageResponse(html, { format: 'png', width: 320, height: 320, headers });
 });
 
 // fallback
 app.get('*', (c) => invalidImageResponse());
+
+const rootDivStyle = `
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  font-family: sans-serif;
+`;
 
 const invalidImageResponse = (): ImageResponse => {
   const html = /*html*/`
