@@ -63,9 +63,10 @@ app.get('/random', (c) => {
     </div>
   `;
   //console.log(html);
-  const response = new ImageResponse(html, { format: 'svg', width: 320, height: 320 });
-  response.headers = new Headers();
-  response.headers.append('cache-control', 'max-age=0');
+  const imageResponse = new ImageResponse(html, { format: 'svg', width: 320, height: 320 });
+  const response = new Response(null, imageResponse);
+  //response.headers = new Headers();
+  response.headers.set('Cache-Control', 'max-age=0');
   //console.log(response.headers);
   return response;
 });
