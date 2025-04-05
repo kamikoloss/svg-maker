@@ -16,9 +16,10 @@ app.get('/color', (c) => {
   const rgb = c.req.queries('rgb');
   if (!rgb) return invalidImageResponse();
   const html = /*html*/`
-    <div style="display: flex; height: 100vh; width: 100vw; background: #${rgb[0]};"></div>
+    <div style="display: flex; width: 100vw; height: 100vh; background: #${rgb[0]};"></div>
   `;
-  return new ImageResponse(html, {width: 24, height: 24});
+  //console.log(html);
+  return new ImageResponse(html, { format: 'svg', width: 24, height: 24 });
 });
 
 app.get('/date', (c) => {
@@ -46,7 +47,8 @@ app.get('/date', (c) => {
       </div>
     </div>
   `;
-  return new ImageResponse(html, {width: 320, height: 320});
+  //console.log(html);
+  return new ImageResponse(html, { format: 'svg', width: 320, height: 320 });
 });
 
 app.get('/random', (c) => {
@@ -60,7 +62,8 @@ app.get('/random', (c) => {
       </div>
     </div>
   `;
-  return new ImageResponse(html, {width: 320, height: 320});
+  //console.log(html);
+  return new ImageResponse(html, { format: 'svg', width: 320, height: 320 });
 });
 
 app.get('/dlsite', async (c) => {
@@ -81,7 +84,8 @@ app.get('/dlsite', async (c) => {
       </div>
     </div>
   `;
-  return new ImageResponse(html, {width: 320, height: 320});
+  //console.log(html);
+  return new ImageResponse(html, { format: 'png', width: 320, height: 320 });
 });
 
 // fallback
@@ -93,7 +97,7 @@ const invalidImageResponse = (): ImageResponse => {
       <p style="font-size: 32px;">?</p>
     </div>
   `;
-  return new ImageResponse(html, {width: 64, height: 64});
+  return new ImageResponse(html, { format: 'svg', width: 64, height: 64 });
 }
 
 export default app;
