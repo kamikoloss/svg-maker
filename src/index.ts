@@ -14,32 +14,29 @@ app.get('/color', (c) => {
 });
 
 app.get('/date', (c) => {
-  const until = c.req.queries('until');
-  const since = c.req.queries('since');
-  if (!until && !since) return invalidImageResponse();
-  let date = until?.[0] || since?.[0];
+  const date = c.req.queries('date');
+  if (!date) return invalidImageResponse();
   let dayCount = 0;
   let dayWord = '';
-  if (until) {
-    dayCount = Math.floor((Date.parse(until[0]) - Date.now()) / (1000 * 60 * 60 * 24));
+  const isBefore = Date.now() < Date.parse(date[0]);
+  if (isBefore) {
+    dayCount = Math.floor((Date.parse(date[0]) - Date.now()) / (1000 * 60 * 60 * 24));
     dayWord = 'until';
-  } else if (since) {
-    dayCount = Math.floor((Date.now() - Date.parse(since[0])) / (1000 * 60 * 60 * 24));
-    dayWord = 'since';
   } else {
-    return invalidImageResponse();
+    dayCount = Math.floor((Date.now() - Date.parse(date[0])) / (1000 * 60 * 60 * 24));
+    dayWord = 'since';
   }
   const html = /*html*/`
     <div style="${rootDivStyle} background: #000000; color: #FFFFFF;">
       <div style="display: flex; flex-direction: column; align-items: center; gap: -16px;">
         <p style="font-size: 128px;">${dayCount}</p>
         <p style="font-size: 32px;">days ${dayWord}</p>
-        <p style="font-size: 32px;">${date}</p>
+        <p style="font-size: 32px;">${date[0]}</p>
       </div>
     </div>
   `;
   //console.log(html);
-  const headers = { 'Cache-Control': `max-age=${3600 * 3}` };
+  const headers = { 'Cache-Control': `max-age=${3600 * 6}` };
   return new ImageResponse(html, { format: 'svg', width: 320, height: 320, headers });
 });
 
@@ -78,7 +75,7 @@ app.get('/dlsite', async (c) => {
     </div>
   `;
   //console.log(html);
-  const headers = { 'Cache-Control': `max-age=${3600 * 3}` };
+  const headers = { 'Cache-Control': `max-age=${3600 * 6}` };
   return new ImageResponse(html, { format: 'png', width: 320, height: 320, headers });
 });
 
