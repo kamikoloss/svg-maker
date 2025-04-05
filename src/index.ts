@@ -63,12 +63,8 @@ app.get('/random', (c) => {
     </div>
   `;
   //console.log(html);
-  const imageResponse = new ImageResponse(html, { format: 'svg', width: 320, height: 320 });
-  const response = new Response(null, imageResponse);
-  //response.headers = new Headers();
-  response.headers.set('Cache-Control', 'max-age=0');
-  //console.log(response.headers);
-  return response;
+  const headers = { 'Cache-Control': 'max-age=0'};
+  return new ImageResponse(html, { format: 'svg', width: 320, height: 320, headers });
 });
 
 app.get('/dlsite', async (c) => {
