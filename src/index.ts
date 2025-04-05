@@ -115,9 +115,9 @@ const invalidImageResponse = (): ImageResponse => {
   return new ImageResponse(html, { format: 'svg', width: 64, height: 64 });
 }
 
-const getFont = async(name: string): Promise<Object> => {
+const getFont = async (name: string): Promise<Object> => {
   return {
-    name: 'name',
+    name: name,
     data: await loadGoogleFont({ family: name }),
   };
 }
