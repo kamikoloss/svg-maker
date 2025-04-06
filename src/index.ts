@@ -23,21 +23,9 @@ app.get('/date', async (c) => {
   const date = c.req.queries('date');
   if (!date) return invalidImageResponse();
 
-  let dayCount = 0;
-  let dayWord = '';
-  let dayFontSizePx = 128;
-  const isBefore = Date.now() < Date.parse(date[0]);
-  if (isBefore) {
-    dayCount = Math.floor((Date.parse(date[0]) - Date.now()) / (1000 * 60 * 60 * 24));
-    dayWord = 'until';
-  } else {
-    dayCount = Math.floor((Date.now() - Date.parse(date[0])) / (1000 * 60 * 60 * 24));
-    dayWord = 'since';
-  }
-  if (dayCount <= -1000 || 10000 <= dayCount) {
-    dayFontSizePx = 96;
-  }
-
+  const dayCount = Math.abs(Math.ceil((Date.parse(date[0]) - Date.now()) / (1000 * 60 * 60 * 24)));
+  const dayWord = Date.now() < Date.parse(date[0]) ? 'until' : 'since';
+  const dayFontSizePx = (dayCount <= -1000 || 10000 <= dayCount) ? 96 : 128;
   const html = /*html*/`
     <div style="${rootDivStyle} background: #000000; color: #FFFFFF; line-height: 1em;">
       <div style="display: flex; flex-direction: column; align-items: center;">
@@ -125,7 +113,7 @@ app.get('/steam', async (c) => {
 
   const html = /*html*/`
     <div style="${rootDivStyle} align-items: flex-end; justify-content: flex-start; color: #FFFFFF; line-height: 0.9em;">
-      <img src="${header_image}" style="width: 100%; height: 100%; object-fit: cover;">
+      <img src="${header_image}" style="width: 100%; height: 100%; object-fit: contain;">
       <div style="position: absolute; display: flex; width: 100%; height: 100%; background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.9));"></div>
       <div style="position: absolute; display: flex; flex-direction: column; align-items: flex-start;">
         <p style="margin: 0; font-size: 32px;">RV:</p>
